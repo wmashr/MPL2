@@ -1,0 +1,1413 @@
+<!DOCTYPE html>
+<html lang="en" class="scroll-smooth dark">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>CHAEN™ | Heavyweight Oversized Archive — Boys & Girls Collection (LKR)</title>
+  <!-- Tailwind CSS CDN -->
+  <script src="https://cdn.tailwindcss.com"></script>
+  <script>
+    tailwind.config = {
+      darkMode: 'class',
+      theme: {
+        extend: {
+          fontFamily: {
+            sans: ['Outfit', 'Inter', 'system-ui', 'sans-serif'],
+            mono: ['JetBrains Mono', 'monospace'],
+          },
+          animation: {
+            'spin-slow': 'spin 12s linear infinite',
+            'float': 'float 6s ease-in-out infinite',
+            'pulse-subtle': 'pulseSubtle 3s ease-in-out infinite',
+          },
+          keyframes: {
+            float: {
+              '0%, 100%': { transform: 'translateY(0px)' },
+              '50%': { transform: 'translateY(-10px)' },
+            },
+            pulseSubtle: {
+              '0%, 100%': { opacity: 1 },
+              '50%': { opacity: 0.7 },
+            }
+          }
+        }
+      }
+    }
+  </script>
+  <!-- GSAP & ScrollTrigger CDN -->
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.5/gsap.min.js"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.5/ScrollTrigger.min.js"></script>
+
+  <!-- ES Module Import Map for Three.js, GLTFLoader, OrbitControls & DecalGeometry -->
+  <script type="importmap">
+    {
+      "imports": {
+        "three": "https://unpkg.com/three@0.160.0/build/three.module.js",
+        "three/addons/": "https://unpkg.com/three@0.160.0/examples/jsm/"
+      }
+    }
+  </script>
+
+  <style>
+    @import url('https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@400;600;800&family=Outfit:wght@400;600;800;900&display=swap');
+
+    body {
+      margin: 0;
+      padding: 0;
+      overflow-x: hidden;
+      background-color: #09090b;
+      color: #f4f4f5;
+      font-family: 'Outfit', 'Inter', system-ui, sans-serif;
+      transition: background-color 0.4s ease, color 0.4s ease;
+    }
+
+    html:not(.dark) body {
+      background-color: #FBFBF9;
+      color: #171717;
+    }
+
+    /* Luxury grid and dot backgrounds */
+    .bg-grid-pattern {
+      background-size: 44px 44px;
+      background-image: 
+        linear-gradient(to right, rgba(255, 255, 255, 0.035) 1px, transparent 1px),
+        linear-gradient(to bottom, rgba(255, 255, 255, 0.035) 1px, transparent 1px);
+    }
+
+    html:not(.dark) .bg-grid-pattern {
+      background-image: 
+        linear-gradient(to right, rgba(0, 0, 0, 0.04) 1px, transparent 1px),
+        linear-gradient(to bottom, rgba(0, 0, 0, 0.04) 1px, transparent 1px);
+    }
+
+    .bg-dot-pattern {
+      background-size: 28px 28px;
+      background-image: radial-gradient(circle, rgba(236, 72, 153, 0.22) 1px, transparent 1px);
+    }
+
+    #webgl-canvas-container {
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 100vw;
+      height: 100vh;
+      z-index: 10;
+      pointer-events: auto;
+    }
+
+    .custom-scrollbar::-webkit-scrollbar {
+      width: 6px;
+    }
+    .custom-scrollbar::-webkit-scrollbar-track {
+      background: transparent;
+    }
+    .custom-scrollbar::-webkit-scrollbar-thumb {
+      background: #55555566;
+      border-radius: 10px;
+    }
+    .custom-scrollbar::-webkit-scrollbar-thumb:hover {
+      background: #88888899;
+    }
+
+    /* Carnage card hover glow & 3D tilt effects */
+    .product-card {
+      transition: all 0.4s cubic-bezier(0.16, 1, 0.3, 1);
+    }
+    .product-card:hover {
+      transform: translateY(-6px);
+      box-shadow: 0 24px 50px -12px rgba(0, 0, 0, 0.5), 0 0 25px rgba(236, 72, 153, 0.15);
+    }
+
+    .ticker-wrap {
+      width: 100%;
+      overflow: hidden;
+      white-space: nowrap;
+    }
+    .ticker-move {
+      display: inline-block;
+      white-space: nowrap;
+      animation: ticker 28s linear infinite;
+    }
+    @keyframes ticker {
+      0% { transform: translate3d(0, 0, 0); }
+      100% { transform: translate3d(-50%, 0, 0); }
+    }
+  </style>
+</head>
+<body class="selection:bg-pink-500 selection:text-white">
+
+  <!-- Fixed 3D WebGL Canvas Layer -->
+  <div id="webgl-canvas-container"></div>
+
+  <!-- Top Announcement Ticker Bar (Carnage Streetwear Vibe) -->
+  <div class="fixed top-0 left-0 right-0 z-50 bg-black text-white py-2 border-b border-neutral-800 font-mono text-[11px] tracking-[0.25em] uppercase font-bold overflow-hidden">
+    <div class="ticker-wrap">
+      <div class="ticker-move">
+        <span>🔥 FREE EXPRESS DISPATCH ACROSS SRI LANKA & WORLDWIDE &nbsp;&nbsp;&nbsp;✦&nbsp;&nbsp;&nbsp; 340 GSM RING-SPUN HEAVYWEIGHT ARCHIVE OVERSIZED TEES &nbsp;&nbsp;&nbsp;✦&nbsp;&nbsp;&nbsp; DIRECT WHATSAPP CHECKOUT INSTANT ORDER IN LKR &nbsp;&nbsp;&nbsp;✦&nbsp;&nbsp;&nbsp; BOYS & GIRLS BOX FIT &nbsp;&nbsp;&nbsp;✦&nbsp;&nbsp;&nbsp;</span>
+        <span>🔥 FREE EXPRESS DISPATCH ACROSS SRI LANKA & WORLDWIDE &nbsp;&nbsp;&nbsp;✦&nbsp;&nbsp;&nbsp; 340 GSM RING-SPUN HEAVYWEIGHT ARCHIVE OVERSIZED TEES &nbsp;&nbsp;&nbsp;✦&nbsp;&nbsp;&nbsp; DIRECT WHATSAPP CHECKOUT INSTANT ORDER IN LKR &nbsp;&nbsp;&nbsp;✦&nbsp;&nbsp;&nbsp; BOYS & GIRLS BOX FIT &nbsp;&nbsp;&nbsp;✦&nbsp;&nbsp;&nbsp;</span>
+      </div>
+    </div>
+  </div>
+
+  <!-- Header Navigation -->
+  <header id="main-header" class="fixed top-8 left-0 right-0 z-40 transition-all duration-300 px-6 sm:px-12 py-4 flex items-center justify-between border-b border-transparent">
+    <a href="#hero-section" class="flex items-center gap-3 group text-decoration-none">
+      <!-- High-Contrast White Banner with Bold Black Letters Logo -->
+      <div class="bg-white text-black px-4 py-1.5 rounded-2xl font-black text-2xl tracking-tighter shadow-2xl border border-neutral-300 transition-transform group-hover:scale-105 flex items-center justify-center uppercase">
+        CHAEN
+      </div>
+      <div class="flex flex-col">
+        <span class="text-[10px] font-mono tracking-[0.3em] text-pink-500 dark:text-pink-400 font-black uppercase">OVERSIZED ARCHIVE</span>
+        <span class="text-[9px] font-mono tracking-widest text-neutral-400 uppercase">SRI LANKA DROP</span>
+      </div>
+    </a>
+
+    <nav class="hidden md:flex items-center gap-8 font-mono text-xs tracking-[0.2em] uppercase text-neutral-600 dark:text-neutral-300 font-extrabold">
+      <a href="#hero-section" class="hover:text-pink-500 transition-colors">Campaign</a>
+      <a href="#collection-section" class="hover:text-pink-500 transition-colors flex items-center gap-1">
+        <span>Collection</span>
+        <span class="px-1.5 py-0.5 text-[9px] rounded-full bg-pink-500/20 text-pink-400">HOT</span>
+      </a>
+      <a href="#product-section" class="hover:text-pink-500 transition-colors">3D Studio</a>
+      <a href="#specs-section" class="hover:text-pink-500 transition-colors">Fabric Specs</a>
+    </nav>
+
+    <div class="flex items-center gap-3">
+      <!-- Dark/Light Theme Toggle -->
+      <button id="theme-toggle-btn" class="w-10 h-10 rounded-2xl border border-neutral-300 dark:border-neutral-800 bg-white/70 dark:bg-neutral-900/70 backdrop-blur-md flex items-center justify-center text-neutral-700 dark:text-neutral-300 hover:scale-105 transition-all shadow-md" title="Toggle dark/light mode">
+        <svg id="sun-icon" class="w-4 h-4 text-amber-400 hidden" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M12 3v1m0 16v1m9-9h-1M4 12H3m15.364 6.364l-.707-.707M6.343 6.343l-.707-.707m12.728 0l-.707.707M6.343 17.657l-.707.707M16 12a4 4 0 11-8 0 4 4 0 018 0z" /></svg>
+        <svg id="moon-icon" class="w-4 h-4 text-neutral-300" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M20.354 15.354A9 9 0 018.646 3.646 9.003 9.003 0 0012 21a9.003 9.003 0 008.354-5.646z" /></svg>
+      </button>
+
+      <!-- Cart Bag Drawer Trigger Button -->
+      <button id="cart-open-btn" class="relative px-5 h-10 rounded-2xl bg-black dark:bg-white text-white dark:text-black font-black text-xs uppercase tracking-wider flex items-center gap-2.5 shadow-xl hover:scale-105 active:scale-95 transition-all border border-neutral-800/50 dark:border-white/50">
+        <svg class="w-4 h-4" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M16 11V7a4 4 0 00-8 0v4M5 9h14l1 12H4L5 9z" /></svg>
+        <span class="hidden sm:inline">Bag</span>
+        <span id="cart-count-badge" class="hidden w-5 h-5 rounded-full bg-pink-500 text-white font-black text-[11px] items-center justify-center animate-pulse">0</span>
+      </button>
+    </div>
+  </header>
+
+  <!-- Scrolling HTML Content Sections -->
+  <div class="relative z-20 flex flex-col pointer-events-none mt-12">
+    
+    <!-- Hero Section -->
+    <section id="hero-section" class="relative min-h-screen w-full flex flex-col items-center justify-between overflow-hidden px-6 pt-32 pb-16 select-none bg-grid-pattern pointer-events-auto">
+      <div class="absolute inset-0 pointer-events-none overflow-hidden -z-10">
+        <div class="absolute top-1/4 right-1/4 w-[500px] h-[500px] rounded-full bg-pink-500/15 dark:bg-pink-500/10 blur-[140px]"></div>
+        <div class="absolute bottom-1/3 left-1/5 w-[450px] h-[450px] rounded-full bg-purple-600/15 dark:bg-purple-600/10 blur-[140px]"></div>
+      </div>
+
+      <div class="z-0 flex flex-wrap justify-center items-center gap-3 px-5 py-2 rounded-full border border-neutral-300 dark:border-neutral-800 bg-white/80 dark:bg-neutral-900/80 backdrop-blur-xl text-xs font-mono tracking-[0.25em] uppercase text-neutral-700 dark:text-neutral-300 shadow-xl animate-float">
+        <span class="w-2.5 h-2.5 rounded-full bg-pink-500 animate-ping"></span>
+        <span class="font-extrabold text-neutral-900 dark:text-white">HEAVYWEIGHT 340 GSM RING-SPUN</span>
+        <span class="text-neutral-400">•</span>
+        <span class="text-pink-500 dark:text-pink-400 font-bold">SRI LANKAN RUPEES (LKR) DROP</span>
+      </div>
+
+      <!-- High Impact White Banner with Bold Black Letters Center Hero Logo -->
+      <div class="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 z-0 pointer-events-none w-full flex flex-col items-center justify-center text-center px-4">
+        <div class="inline-block bg-white text-black px-8 py-3 rounded-3xl shadow-2xl border-4 border-neutral-200 transform hover:scale-105 transition-transform duration-500">
+          <h1 class="text-6xl sm:text-8xl md:text-9xl font-black tracking-tighter uppercase leading-none text-black select-none">
+            CHAEN
+          </h1>
+        </div>
+        <p class="mt-4 text-xs sm:text-base font-mono tracking-[0.4em] uppercase text-neutral-500 dark:text-neutral-400 font-extrabold max-w-2xl mx-auto">
+          OWN EVERY MOMENT // BUILT FOR MAIN CHARACTER ENERGY IN SRI LANKA
+        </p>
+      </div>
+
+      <div class="z-0 flex flex-col sm:flex-row items-center gap-4 pb-4">
+        <a href="#collection-section" class="px-8 py-4 rounded-2xl bg-black dark:bg-white text-white dark:text-black font-black text-xs uppercase tracking-[0.2em] shadow-2xl hover:scale-105 active:scale-95 transition-all flex items-center gap-3 border border-neutral-800 dark:border-white">
+          <span>Explore Oversized Collection (LKR)</span>
+          <span class="text-pink-500 dark:text-pink-600 text-sm">↓</span>
+        </a>
+        <a href="#product-section" class="px-8 py-4 rounded-2xl bg-white/80 dark:bg-neutral-900/80 hover:bg-white dark:hover:bg-neutral-800 text-neutral-900 dark:text-white font-black text-xs uppercase tracking-[0.2em] shadow-lg transition-all border border-neutral-300 dark:border-neutral-800 flex items-center gap-2">
+          <span>Launch 3D Customizer</span>
+          <span>⚡</span>
+        </a>
+      </div>
+    </section>
+
+    <!-- CARNAGE-STYLE BOYS & GIRLS OVERSIZED COLLECTION SECTION -->
+    <section id="collection-section" class="relative w-full max-w-7xl mx-auto px-6 py-24 z-20 pointer-events-auto">
+      <div class="flex flex-col md:flex-row md:items-end justify-between gap-6 mb-12 border-b border-neutral-200 dark:border-neutral-800/80 pb-8">
+        <div>
+          <div class="flex items-center gap-2 mb-2">
+            <span class="w-2 h-2 rounded-full bg-pink-500"></span>
+            <span class="text-xs font-mono tracking-[0.3em] uppercase text-pink-500 font-extrabold">CARNAGE EDITION ARCHIVES</span>
+          </div>
+          <h2 class="text-3xl sm:text-5xl font-black tracking-tight text-neutral-900 dark:text-white uppercase">
+            OVERSIZED T-SHIRT DROP (LKR)
+          </h2>
+          <p class="text-xs sm:text-sm text-neutral-600 dark:text-neutral-400 font-mono mt-2 max-w-xl">
+            Boxy drop-shoulder cuts tailored for Boys and Girls. Engineered with 340 GSM luxury cotton. Select size and order directly via WhatsApp in Sri Lankan Rupees.
+          </p>
+        </div>
+
+        <!-- Filter Category Tabs -->
+        <div class="flex items-center gap-2 overflow-x-auto pb-2 md:pb-0 font-mono text-xs font-extrabold uppercase custom-scrollbar">
+          <button data-filter="all" class="filter-btn active px-5 py-3 rounded-2xl bg-black dark:bg-white text-white dark:text-black shadow-lg transition-all flex items-center gap-2 whitespace-nowrap">
+            <span>✦ All Oversized (15)</span>
+          </button>
+          <button data-filter="boys" class="filter-btn px-5 py-3 rounded-2xl bg-white/70 dark:bg-neutral-900/70 text-neutral-600 dark:text-neutral-300 hover:bg-neutral-200 dark:hover:bg-neutral-800 transition-all border border-neutral-200 dark:border-neutral-800 flex items-center gap-2 whitespace-nowrap">
+            <span>♂ Boys / Men (7)</span>
+          </button>
+          <button data-filter="girls" class="filter-btn px-5 py-3 rounded-2xl bg-white/70 dark:bg-neutral-900/70 text-neutral-600 dark:text-neutral-300 hover:bg-neutral-200 dark:hover:bg-neutral-800 transition-all border border-neutral-200 dark:border-neutral-800 flex items-center gap-2 whitespace-nowrap">
+            <span>♀ Girls / Women (8)</span>
+          </button>
+        </div>
+      </div>
+
+      <!-- Product Cards Grid -->
+      <div id="product-grid" class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-8">
+        <!-- Products generated dynamically via JS below -->
+      </div>
+    </section>
+
+    <!-- Product Customization Studio Section (Interactive 3D WebGL) -->
+    <section id="product-section" class="relative min-h-screen w-full max-w-7xl mx-auto px-6 py-28 flex items-center justify-end z-20 bg-dot-pattern pointer-events-auto">
+      <div class="absolute top-1/2 left-1/4 -translate-y-1/2 w-96 h-96 rounded-full bg-pink-500/15 dark:bg-pink-500/10 blur-[120px] pointer-events-none -z-10"></div>
+      
+      <!-- Left Side Info Prompt for 3D Studio -->
+      <div class="hidden lg:flex flex-col max-w-md mr-auto pl-4">
+        <span class="text-xs font-mono tracking-[0.3em] uppercase text-pink-500 font-extrabold mb-3">✦ INTERACTIVE 3D WEBGL STUDIO</span>
+        <h3 class="text-4xl font-black text-neutral-900 dark:text-white uppercase tracking-tight leading-tight">
+          CUSTOMIZE YOUR OVERSIZED FIT IN REAL-TIME
+        </h3>
+        <p class="text-sm text-neutral-600 dark:text-neutral-400 font-mono mt-4 leading-relaxed">
+          Rotate the 3D garment 360° to inspect the heavyweight boxy drape. Test any color combination and project archive decals onto the back of the shirt before dispatching your order in LKR.
+        </p>
+        <div class="flex items-center gap-4 mt-8">
+          <div class="flex items-center gap-2 px-4 py-2.5 rounded-xl bg-neutral-100 dark:bg-neutral-900 border border-neutral-200 dark:border-neutral-800 text-xs font-mono">
+            <span class="w-2 h-2 rounded-full bg-emerald-500 animate-ping"></span>
+            <span>Real-time Shader Wind Physics</span>
+          </div>
+        </div>
+      </div>
+
+      <!-- Right-Side Interactive Customization Card -->
+      <div class="w-full lg:w-[480px] bg-white/95 dark:bg-neutral-900/95 backdrop-blur-2xl border border-neutral-300 dark:border-neutral-800 rounded-3xl p-8 shadow-2xl flex flex-col gap-6">
+        <div class="flex flex-col gap-1 border-b border-neutral-200 dark:border-neutral-800 pb-5">
+          <div class="flex items-center justify-between">
+            <span class="text-xs font-mono tracking-[0.2em] uppercase text-pink-500 font-extrabold flex items-center gap-1.5">
+              ✦ 3D CUSTOMIZER // ARCHIVE 01
+            </span>
+            <span class="font-mono text-xs font-bold px-3 py-1 rounded-full bg-emerald-500/20 text-emerald-600 dark:text-emerald-400">In Stock</span>
+          </div>
+          <h2 class="text-2xl sm:text-3xl font-black tracking-tight text-neutral-900 dark:text-white uppercase mt-1">STUDIO OVERSIZED TEE</h2>
+          <div class="flex items-baseline gap-3 mt-1">
+            <span id="display-price" class="text-2xl font-black font-mono text-neutral-900 dark:text-white">LKR 6,900</span>
+            <span class="text-xs font-mono text-neutral-500 dark:text-neutral-400">340 GSM Ring-Spun Cotton</span>
+          </div>
+        </div>
+
+        <!-- 1. Base Color -->
+        <div class="flex flex-col gap-3">
+          <div class="flex justify-between items-center text-xs font-mono">
+            <span class="uppercase text-neutral-500 dark:text-neutral-400 font-extrabold">1. Select Fabric Color</span>
+            <span id="selected-color-name" class="font-bold text-neutral-900 dark:text-white">Pure Cloud White</span>
+          </div>
+          <div id="color-selector-container" class="flex items-center gap-3 flex-wrap"></div>
+        </div>
+
+        <!-- 2. Decal Graphic Archive -->
+        <div class="flex flex-col gap-3">
+          <div class="flex justify-between items-center text-xs font-mono">
+            <span class="uppercase text-neutral-500 dark:text-neutral-400 font-extrabold">2. Front & Back Graphic Archive</span>
+            <span id="selected-decal-name" class="font-bold text-neutral-900 dark:text-white">SUPREME FLAME</span>
+          </div>
+          <div id="decal-selector-container" class="grid grid-cols-1 sm:grid-cols-2 gap-2.5 max-h-[220px] overflow-y-auto pr-1 custom-scrollbar"></div>
+        </div>
+
+        <!-- 3. Size Selector -->
+        <div class="flex flex-col gap-3">
+          <div class="flex justify-between items-center text-xs font-mono">
+            <span class="uppercase text-neutral-500 dark:text-neutral-400 font-extrabold">3. Select Size (Oversized Boxy Fit)</span>
+            <span id="selected-size-name" class="font-bold text-neutral-900 dark:text-white">L</span>
+          </div>
+          <div id="size-selector-container" class="grid grid-cols-4 gap-2.5"></div>
+        </div>
+
+        <!-- Add to Bag Button -->
+        <button id="add-to-cart-btn" class="w-full h-14 bg-black dark:bg-white hover:bg-neutral-800 dark:hover:bg-neutral-100 text-white dark:text-black font-black tracking-wider rounded-2xl shadow-2xl transition-all duration-300 flex items-center justify-center gap-3 active:scale-95 text-sm uppercase mt-2 group">
+          <svg class="w-5 h-5 fill-current" viewBox="0 0 24 24"><path d="M16 11V7a4 4 0 00-8 0v4M5 9h14l1 12H4L5 9z" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg>
+          <span id="add-btn-text">Add to Bag — LKR 6,900</span>
+          <span class="transition-transform group-hover:translate-x-1">→</span>
+        </button>
+      </div>
+    </section>
+
+    <!-- Fabric Specification Section -->
+    <section id="specs-section" class="relative w-full max-w-7xl mx-auto px-6 py-24 z-20 rounded-3xl border border-neutral-300 dark:border-neutral-800/80 my-16 pointer-events-auto bg-white/60 dark:bg-neutral-900/60 backdrop-blur-xl">
+      <div class="flex flex-col items-center text-center max-w-3xl mx-auto mb-16">
+        <span class="text-xs font-mono tracking-[0.3em] uppercase text-pink-500 font-extrabold mb-2">PRECISION STREETWEAR ENGINEERING</span>
+        <h2 class="text-3xl sm:text-5xl font-black tracking-tight text-neutral-900 dark:text-white uppercase">CHAEN™ FABRIC SPECIFICATION</h2>
+        <p class="text-sm sm:text-base text-neutral-600 dark:text-neutral-400 mt-4 leading-relaxed font-mono">
+          Every CHAEN garment is developed specifically to hold a sharp boxy silhouette while providing unparalleled softness against the skin. Designed for those who refuse to wear ordinary.
+        </p>
+      </div>
+
+      <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
+        <div class="p-8 rounded-3xl bg-white dark:bg-neutral-900 border border-neutral-200 dark:border-neutral-800 shadow-xl flex flex-col gap-4 hover:border-pink-500/50 transition-colors">
+          <div class="w-12 h-12 rounded-2xl bg-pink-500/10 text-pink-500 flex items-center justify-center font-black text-xl">✦</div>
+          <h3 class="font-black text-base tracking-tight text-neutral-900 dark:text-white uppercase">340 GSM Ring-Spun Cotton</h3>
+          <p class="text-xs text-neutral-600 dark:text-neutral-400 leading-relaxed font-mono">Custom engineered heavyweight jersey fabric with exceptional structure and zero transparency.</p>
+        </div>
+        <div class="p-8 rounded-3xl bg-white dark:bg-neutral-900 border border-neutral-200 dark:border-neutral-800 shadow-xl flex flex-col gap-4 hover:border-pink-500/50 transition-colors">
+          <div class="w-12 h-12 rounded-2xl bg-purple-500/10 text-purple-500 flex items-center justify-center font-black text-xl">↻</div>
+          <h3 class="font-black text-base tracking-tight text-neutral-900 dark:text-white uppercase">Dynamic WebGL Studio</h3>
+          <p class="text-xs text-neutral-600 dark:text-neutral-400 leading-relaxed font-mono">Real-time 3D surface decal projection allowing instant preview of CHAEN front & back archives.</p>
+        </div>
+        <div class="p-8 rounded-3xl bg-white dark:bg-neutral-900 border border-neutral-200 dark:border-neutral-800 shadow-xl flex flex-col gap-4 hover:border-pink-500/50 transition-colors">
+          <div class="w-12 h-12 rounded-2xl bg-blue-500/10 text-blue-500 flex items-center justify-center font-black text-xl">🛡</div>
+          <h3 class="font-black text-base tracking-tight text-neutral-900 dark:text-white uppercase">Enzyme Washed & Pre-Shrunk</h3>
+          <p class="text-xs text-neutral-600 dark:text-neutral-400 leading-relaxed font-mono">Treated with a luxury enzyme wash process to guarantee zero shrinkage after machine washing.</p>
+        </div>
+        <div class="p-8 rounded-3xl bg-white dark:bg-neutral-900 border border-neutral-200 dark:border-neutral-800 shadow-xl flex flex-col gap-4 hover:border-pink-500/50 transition-colors">
+          <div class="w-12 h-12 rounded-2xl bg-emerald-500/10 text-emerald-500 flex items-center justify-center font-black text-xl">💬</div>
+          <h3 class="font-black text-base tracking-tight text-neutral-900 dark:text-white uppercase">Direct WhatsApp Order</h3>
+          <p class="text-xs text-neutral-600 dark:text-neutral-400 leading-relaxed font-mono">Skip tedious checkout forms. Connect directly with our dispatch specialists via WhatsApp with itemized LKR order details.</p>
+        </div>
+      </div>
+    </section>
+
+    <!-- Footer -->
+    <footer class="relative w-full border-t border-neutral-200 dark:border-neutral-800 bg-white dark:bg-neutral-950 py-16 px-6 z-20 pointer-events-auto">
+      <div class="max-w-7xl mx-auto flex flex-col md:flex-row items-center justify-between gap-8 text-xs font-mono text-neutral-500 dark:text-neutral-400">
+        <div class="flex flex-col items-center md:items-start gap-2">
+          <div class="flex items-center gap-2">
+            <div class="bg-white text-black px-2.5 py-0.5 rounded font-black text-sm uppercase">CHAEN</div>
+            <span class="text-pink-500 font-bold">// CARNAGE AESTHETIC SRI LANKA</span>
+          </div>
+          <span>Built for Boys & Girls Oversized T-Shirt Enthusiasts across Sri Lanka & Worldwide.</span>
+          <span>© 2026 CHAEN Clothing Ltd. All rights reserved.</span>
+        </div>
+        <div class="flex flex-wrap items-center justify-center gap-8 uppercase tracking-[0.2em] font-extrabold">
+          <a href="#collection-section" class="hover:text-pink-500 transition-colors">Collection</a>
+          <a href="#product-section" class="hover:text-pink-500 transition-colors">3D Studio</a>
+          <a href="https://wa.me/94770000000" target="_blank" class="text-emerald-500 hover:text-emerald-400 transition-colors flex items-center gap-1.5">
+            <span>💬 Support WhatsApp</span>
+          </a>
+          <a href="#hero-section" class="hover:text-pink-500 transition-colors">Back to top ↑</a>
+        </div>
+      </div>
+    </footer>
+  </div>
+
+  <!-- Slide-In Bag & WhatsApp Checkout Drawer -->
+  <div id="cart-backdrop" class="fixed inset-0 bg-black/60 backdrop-blur-sm z-50 opacity-0 pointer-events-none transition-opacity duration-300"></div>
+  <div id="cart-drawer" class="fixed top-0 right-0 h-full w-full sm:w-[480px] bg-white dark:bg-neutral-900 z-50 shadow-2xl flex flex-col transition-transform duration-500 translate-x-full border-l border-neutral-300 dark:border-neutral-800">
+    <div class="flex items-center justify-between px-6 py-6 border-b border-neutral-200 dark:border-neutral-800">
+      <div class="flex items-center gap-2.5">
+        <span class="font-black text-lg tracking-wider uppercase text-neutral-900 dark:text-white" id="drawer-title">CHAEN™ Bag (0)</span>
+      </div>
+      <button id="cart-close-btn" class="w-10 h-10 rounded-full bg-neutral-100 dark:bg-neutral-800 flex items-center justify-center text-neutral-600 dark:text-neutral-300 hover:bg-neutral-200 dark:hover:bg-neutral-700 transition-colors font-bold">✕</button>
+    </div>
+
+    <div id="cart-items-container" class="flex-1 overflow-y-auto px-6 py-6 flex flex-col gap-5 divide-y divide-neutral-200 dark:divide-neutral-800/80 custom-scrollbar"></div>
+
+    <div id="cart-footer" class="p-6 border-t border-neutral-200 dark:border-neutral-800 bg-neutral-50 dark:bg-neutral-900/90 hidden flex-col gap-4">
+      <div class="flex items-center justify-between text-xs text-neutral-500 dark:text-neutral-400 font-mono">
+        <span>Subtotal</span>
+        <span id="cart-subtotal" class="font-bold text-neutral-900 dark:text-white">LKR 0</span>
+      </div>
+      <div class="flex items-center justify-between text-xs text-neutral-500 dark:text-neutral-400 font-mono">
+        <span>Express Islandwide & Worldwide Shipping</span>
+        <span class="text-emerald-500 font-bold uppercase tracking-wider">Free</span>
+      </div>
+      <div class="flex items-center justify-between text-lg font-black text-neutral-900 dark:text-white uppercase pt-2 border-t border-neutral-200 dark:border-neutral-800">
+        <span>Total Due</span>
+        <span class="font-mono text-xl text-pink-500" id="cart-total">LKR 0</span>
+      </div>
+
+      <!-- WhatsApp Phone & Note Box -->
+      <div class="flex flex-col gap-2 mt-1">
+        <label class="text-[11px] font-mono text-neutral-400 uppercase tracking-wider">Your WhatsApp / Contact No (Optional note)</label>
+        <input id="whatsapp-user-phone" type="text" placeholder="e.g. +94 77 123 4567 or Delivery Address" class="w-full px-4 py-3 rounded-xl bg-white dark:bg-neutral-800 border border-neutral-300 dark:border-neutral-700 text-xs text-neutral-900 dark:text-white font-mono focus:outline-none focus:border-pink-500 transition-colors" />
+      </div>
+
+      <!-- WhatsApp Checkout Button -->
+      <a id="whatsapp-checkout-link" href="#" target="_blank" rel="noopener noreferrer" class="w-full h-14 bg-emerald-600 hover:bg-emerald-500 text-white font-black tracking-wider rounded-2xl shadow-2xl transition-all duration-300 flex items-center justify-center gap-3 active:scale-95 text-sm uppercase mt-1 group">
+        <span>💬 Checkout via WhatsApp</span>
+        <span class="transition-transform group-hover:translate-x-1">→</span>
+      </a>
+
+      <button id="clear-cart-btn" class="text-[11px] font-mono text-neutral-400 hover:text-red-500 underline text-center transition-colors">Clear Entire Bag</button>
+    </div>
+  </div>
+
+  <!-- Application Logic & Three.js 3D Engine Script -->
+  <script type="module">
+    import * as THREE from 'three';
+    import { GLTFLoader } from 'three/addons/loaders/GLTFLoader.js';
+    import { OrbitControls } from 'three/addons/controls/OrbitControls.js';
+    import { DecalGeometry } from 'three/addons/geometries/DecalGeometry.js';
+
+    // --- PRODUCT CATALOG (Boys & Girls Oversized Collection in LKR) ---
+    const PRODUCTS = [
+      // NEWLY FEATURED 5 ARCHIVE DROPS FROM ATTACHED PHOTOS
+      {
+        id: 'chaen-surf-ocean-white',
+        name: 'CHAEN × SURF ME TO THE OCEAN OVERSIZED TEE',
+        fit: 'Girls / Women Oversized Boxy',
+        gender: 'girls',
+        price: 6900,
+        colorName: 'Pure Cloud White',
+        colorHex: '#FFFFFF',
+        frontImg: './public/products/chaen-surf-ocean-white.jpg',
+        backImg: './public/products/chaen-surf-ocean-white.jpg',
+        decalName: 'SURF ME TO THE OCEAN (Pixel Handshake)',
+        badge: 'NEW LKR DROP • GIRLS FIT',
+        badgeColor: 'bg-cyan-500/20 text-cyan-400 font-bold'
+      },
+      {
+        id: 'chaen-hard-impossible-black',
+        name: 'CHAEN × HARD DOESN\'T MEAN IMPOSSIBLE TEE',
+        fit: 'Boys / Men Oversized Boxy',
+        gender: 'boys',
+        price: 7500,
+        colorName: 'Obsidian Black',
+        colorHex: '#18181B',
+        frontImg: './public/products/chaen-hard-impossible-black.jpg',
+        backImg: './public/products/chaen-hard-impossible-black.jpg',
+        decalName: 'HARD DOESN\'T MEAN IMPOSSIBLE (Graffiti Script)',
+        badge: 'HOT ARCHIVE • BOYS FIT',
+        badgeColor: 'bg-pink-500/20 text-pink-400 font-bold'
+      },
+      {
+        id: 'chaen-mystery-skull-black',
+        name: 'CHAEN × MYSTERY FLAMING SKULL OVERSIZED TEE',
+        fit: 'Boys / Men Oversized Boxy',
+        gender: 'boys',
+        price: 7500,
+        colorName: 'Obsidian Black',
+        colorHex: '#18181B',
+        frontImg: './public/products/chaen-mystery-skull-black.jpg',
+        backImg: './public/products/chaen-mystery-skull-black.jpg',
+        decalName: 'MYSTERY FLAMING SKULL (Red/White Streetwear Arch)',
+        badge: 'CARNAGE EDITION • BOYS FIT',
+        badgeColor: 'bg-red-500/20 text-red-400 font-bold'
+      },
+      {
+        id: 'chaen-scream-spider-white',
+        name: 'CHAEN × SCREAM SPIDER WEB OVERSIZED TEE',
+        fit: 'Girls / Women Oversized Boxy',
+        gender: 'girls',
+        price: 6900,
+        colorName: 'Pure Cloud White',
+        colorHex: '#FFFFFF',
+        frontImg: './public/products/chaen-scream-spider-white.jpg',
+        backImg: './public/products/chaen-scream-spider-white.jpg',
+        decalName: 'SCREAM SPIDER WEB (Purple Web + Black Widow)',
+        badge: 'TRENDING DROP • GIRLS FIT',
+        badgeColor: 'bg-purple-500/20 text-purple-400 font-bold'
+      },
+      {
+        id: 'chaen-essential-black-female',
+        name: 'CHAEN × OBSIDIAN HEAVYWEIGHT ESSENTIAL BOX TEE',
+        fit: 'Girls / Women Oversized Boxy',
+        gender: 'girls',
+        price: 6500,
+        colorName: 'Obsidian Black',
+        colorHex: '#18181B',
+        frontImg: './public/products/chaen-essential-black-female.jpg',
+        backImg: './public/products/chaen-essential-black-female.jpg',
+        decalName: 'CHAEN MINIMAL BOX ESSENTIAL',
+        badge: 'CORE ESSENTIAL • GIRLS FIT',
+        badgeColor: 'bg-neutral-500/20 text-neutral-300 font-bold'
+      },
+      // EARLIER MODEL ARCHIVE SHOTS
+      {
+        id: 'chaen-supreme-female',
+        name: 'CHAEN × SUPREME FLAME OVERSIZED TEE',
+        fit: 'Girls / Women Oversized Boxy',
+        gender: 'girls',
+        price: 6900,
+        colorName: 'Obsidian Black',
+        colorHex: '#18181B',
+        frontImg: './public/products/female-black-front.jpg',
+        backImg: './public/products/female-supreme-back.jpg',
+        decalName: 'SUPREME FLAME (Gothic Arch + Purple Fire)',
+        badge: 'MOST LOVED • GIRLS FIT',
+        badgeColor: 'bg-pink-500/20 text-pink-400 font-bold'
+      },
+      {
+        id: 'chaen-spider-male',
+        name: 'CHAEN × SPIDER ARCHIVE OVERSIZED TEE',
+        fit: 'Boys / Men Oversized Boxy',
+        gender: 'boys',
+        price: 7200,
+        colorName: 'Pure Cloud White',
+        colorHex: '#FFFFFF',
+        frontImg: './public/products/male-white-front.jpg',
+        backImg: './public/products/male-spider-back.jpg',
+        decalName: 'SPIDER ARCHIVE (Grunge Web + Warning Text)',
+        badge: 'LIMITED EDITION • BOYS FIT',
+        badgeColor: 'bg-purple-500/20 text-purple-400 font-bold'
+      },
+      {
+        id: 'chaen-stitch-female',
+        name: 'CHAEN × STITCH RETRO EDITION OVERSIZED TEE',
+        fit: 'Girls / Women Oversized Boxy',
+        gender: 'girls',
+        price: 6900,
+        colorName: 'Pure Cloud White',
+        colorHex: '#FFFFFF',
+        frontImg: './public/products/female-white-front.jpg',
+        backImg: './public/products/female-stitch-back.jpg',
+        decalName: 'STITCH RETRO (Blue Character + Pink Script)',
+        badge: 'RETRO ARCHIVE • GIRLS FIT',
+        badgeColor: 'bg-blue-500/20 text-blue-400 font-bold'
+      },
+      {
+        id: 'chaen-obsidian-male',
+        name: 'CHAEN OBSIDIAN HEAVYWEIGHT BLANK ESSENTIAL',
+        fit: 'Boys / Men Oversized Boxy',
+        gender: 'boys',
+        price: 6500,
+        colorName: 'Pitch Black',
+        colorHex: '#121214',
+        frontImg: './public/products/male-black-front.jpg',
+        backImg: './public/products/male-black-back.jpg',
+        decalName: 'MINIMAL ARCHIVE BOX BRANDING',
+        badge: 'CORE ESSENTIAL • BOYS FIT',
+        badgeColor: 'bg-neutral-500/20 text-neutral-300 font-bold'
+      },
+      {
+        id: 'chaen-supreme-female-alt',
+        name: 'CHAEN × SUPREME PINK ARCHIVE OVERSIZED TEE',
+        fit: 'Girls / Women Oversized Boxy',
+        gender: 'girls',
+        price: 6900,
+        colorName: 'Obsidian Black',
+        colorHex: '#18181B',
+        frontImg: './public/products/female-black-front-2.jpg',
+        backImg: './public/products/female-supreme-back.jpg',
+        decalName: 'SUPREME FLAME ARCHIVE',
+        badge: 'BEST SELLER • GIRLS FIT',
+        badgeColor: 'bg-pink-500/20 text-pink-400 font-bold'
+      },
+      // Graphic Archive Cards
+      {
+        id: 'chaen-burnfree-boys',
+        name: 'CHAEN × BURN FREE FLAMES OVERSIZED TEE',
+        fit: 'Boys / Men Oversized Boxy',
+        gender: 'boys',
+        price: 7200,
+        colorName: 'Obsidian Black',
+        colorHex: '#18181B',
+        frontImg: './public/decals/burnfree.png',
+        backImg: './public/decals/chaen_logo.png',
+        decalName: 'BURN FREE FIRE ERUPTION',
+        badge: 'ARCHIVE DROP • BOYS FIT',
+        badgeColor: 'bg-red-500/20 text-red-400 font-bold',
+        isGraphicCard: true
+      },
+      {
+        id: 'chaen-cyberpunk-unisex',
+        name: 'CHAEN × CYBERPUNK NEON GLITCH OVERSIZED TEE',
+        fit: 'Boys & Girls Oversized Boxy',
+        gender: 'boys',
+        price: 7200,
+        colorName: 'Heavy Slate Grey',
+        colorHex: '#3B4352',
+        frontImg: './public/decals/cyberpunk.png',
+        backImg: './public/decals/chaen_logo.png',
+        decalName: 'CYBERPUNK JAPANESE NEON',
+        badge: 'NEON DROP • UNISEX BOX FIT',
+        badgeColor: 'bg-cyan-500/20 text-cyan-400 font-bold',
+        isGraphicCard: true
+      },
+      {
+        id: 'chaen-superstar-girls',
+        name: 'CHAEN × SUPERSTAR PINK COLLEGIATE TEE',
+        fit: 'Girls / Women Oversized Boxy',
+        gender: 'girls',
+        price: 6900,
+        colorName: 'Soft Off-White Bone Cream',
+        colorHex: '#F7F6F2',
+        frontImg: './public/decals/superstar.png',
+        backImg: './public/decals/chaen_logo.png',
+        decalName: 'SUPERSTAR DISTRESSED STAR',
+        badge: 'COLLEGIATE ARCHIVE • GIRLS FIT',
+        badgeColor: 'bg-pink-500/20 text-pink-400 font-bold',
+        isGraphicCard: true
+      },
+      {
+        id: 'chaen-acid-boys',
+        name: 'CHAEN × ACID RAVE 90S HYPNOTIC TEE',
+        fit: 'Boys / Men Oversized Boxy',
+        gender: 'boys',
+        price: 6900,
+        colorName: 'Pure Cloud White',
+        colorHex: '#FFFFFF',
+        frontImg: './public/decals/acid.png',
+        backImg: './public/decals/chaen_logo.png',
+        decalName: 'ACID RAVE YELLOW SMILEY',
+        badge: '90S RAVE DROP • BOYS FIT',
+        badgeColor: 'bg-yellow-500/20 text-yellow-400 font-bold',
+        isGraphicCard: true
+      },
+      {
+        id: 'chaen-vibes-girls',
+        name: 'CHAEN × VIBES MELT GRAFFITI OVERSIZED TEE',
+        fit: 'Girls / Women Oversized Boxy',
+        gender: 'girls',
+        price: 6900,
+        colorName: 'Warm Cream Sand',
+        colorHex: '#EAE6DC',
+        frontImg: './public/decals/vibes.png',
+        backImg: './public/decals/chaen_logo.png',
+        decalName: 'VIBES LIQUID WHITE MELT',
+        badge: 'STREET ARCHIVE • GIRLS FIT',
+        badgeColor: 'bg-amber-500/20 text-amber-400 font-bold',
+        isGraphicCard: true
+      }
+    ];
+
+    // --- State Management ---
+    const COLOR_OPTIONS = [
+      { id: 'cloud-white', name: 'Pure Cloud White', hex: '#FFFFFF', textColor: '#1A1A1A' },
+      { id: 'bone-cream', name: 'Soft Off-White / Bone', hex: '#F7F6F2', textColor: '#1A1A1A' },
+      { id: 'obsidian', name: 'Obsidian Black', hex: '#18181B', textColor: '#FFFFFF' },
+      { id: 'luxury-sand', name: 'Warm Cream Sand', hex: '#EAE6DC', textColor: '#1A1A1A' },
+      { id: 'slate', name: 'Heavy Slate Grey', hex: '#3B4352', textColor: '#FFFFFF' }
+    ];
+
+    const DECAL_OPTIONS = [
+      { id: 'supreme', name: 'SUPREME FLAME', path: './public/decals/supreme.png', subtitle: 'Pink gothic arch + purple main character flames', priceOffset: 0 },
+      { id: 'stitch', name: 'STITCH EDITION', path: './public/decals/stitch.png', subtitle: 'Stitch blue character & retro pink script', priceOffset: 0 },
+      { id: 'superstar', name: 'SUPERSTAR PINK', path: './public/decals/superstar.png', subtitle: 'Distressed layered star & collegiate arch', priceOffset: 0 },
+      { id: 'vibes', name: 'VIBES MELT', path: './public/decals/vibes.png', subtitle: 'Wavy liquid white melted graffiti lettering', priceOffset: 0 },
+      { id: 'burnfree', name: 'BURN FREE FLAMES', path: './public/decals/burnfree.png', subtitle: 'Red fire erupting around bold stencil', priceOffset: 500 },
+      { id: 'cyberpunk', name: 'CYBERPUNK NEON', path: './public/decals/cyberpunk.png', subtitle: 'Futuristic Japanese glitch typography & cyan glow', priceOffset: 500 },
+      { id: 'acid', name: 'ACID RAVE 90S', path: './public/decals/acid.png', subtitle: 'Neon yellow smiley face & hypnotic ripples', priceOffset: 0 },
+      { id: 'geometry', name: 'BAUHAUS GEOMETRY', path: './public/decals/geometry.png', subtitle: 'Minimalist primary geometric block art', priceOffset: 0 },
+      { id: 'minimal', name: 'MINIMAL ARCHIVE', path: './public/decals/minimal.png', subtitle: 'Clean Swiss sans-serif typography box', priceOffset: 0 }
+    ];
+
+    const SIZE_OPTIONS = ['S', 'M', 'L', 'XL'];
+
+    let state = {
+      selectedColor: COLOR_OPTIONS[0],
+      selectedDecal: DECAL_OPTIONS[0],
+      selectedSize: 'L',
+      basePrice: 6900,
+      cart: [],
+      isCartOpen: false,
+      isDark: true,
+      activeFilter: 'all',
+      cardStates: {} // stores selected size and flipped view per product card
+    };
+
+    // --- DOM Elements ---
+    const productGrid = document.getElementById('product-grid');
+    const colorSelectorContainer = document.getElementById('color-selector-container');
+    const decalSelectorContainer = document.getElementById('decal-selector-container');
+    const sizeSelectorContainer = document.getElementById('size-selector-container');
+    const selectedColorNameEl = document.getElementById('selected-color-name');
+    const selectedDecalNameEl = document.getElementById('selected-decal-name');
+    const selectedSizeNameEl = document.getElementById('selected-size-name');
+    const displayPriceEl = document.getElementById('display-price');
+    const addBtnTextEl = document.getElementById('add-btn-text');
+    const addToCartBtn = document.getElementById('add-to-cart-btn');
+    const cartOpenBtn = document.getElementById('cart-open-btn');
+    const cartCloseBtn = document.getElementById('cart-close-btn');
+    const cartBackdrop = document.getElementById('cart-backdrop');
+    const cartDrawer = document.getElementById('cart-drawer');
+    const cartCountBadge = document.getElementById('cart-count-badge');
+    const drawerTitle = document.getElementById('drawer-title');
+    const cartItemsContainer = document.getElementById('cart-items-container');
+    const cartFooter = document.getElementById('cart-footer');
+    const cartSubtotalEl = document.getElementById('cart-subtotal');
+    const cartTotalEl = document.getElementById('cart-total');
+    const whatsappLink = document.getElementById('whatsapp-checkout-link');
+    const whatsappUserPhoneInput = document.getElementById('whatsapp-user-phone');
+    const clearCartBtn = document.getElementById('clear-cart-btn');
+    const themeToggleBtn = document.getElementById('theme-toggle-btn');
+    const sunIcon = document.getElementById('sun-icon');
+    const moonIcon = document.getElementById('moon-icon');
+    const mainHeader = document.getElementById('main-header');
+
+    // Helper: format price in Sri Lankan Rupees
+    function formatLKR(amount) {
+      return `LKR ${amount.toLocaleString('en-US')}`;
+    }
+
+    // --- Render Products Grid ---
+    function renderProductsGrid() {
+      const filtered = PRODUCTS.filter(p => state.activeFilter === 'all' || p.gender === state.activeFilter);
+
+      productGrid.innerHTML = filtered.map(p => {
+        const currentCardState = state.cardStates[p.id] || { size: 'L', flipped: false };
+        const displayImg = currentCardState.flipped ? p.backImg : p.frontImg;
+        const imgBgStyle = p.isGraphicCard ? `background-color: ${p.colorHex};` : '';
+
+        return `
+          <div class="product-card bg-white dark:bg-neutral-900 border border-neutral-200 dark:border-neutral-800 rounded-3xl overflow-hidden shadow-xl flex flex-col justify-between group">
+            
+            <!-- Image Showcase Box with Flip Toggle -->
+            <div class="relative w-full h-[400px] overflow-hidden bg-neutral-100 dark:bg-neutral-800/60 flex items-center justify-center p-4" style="${imgBgStyle}">
+              <!-- Badge -->
+              <span class="absolute top-4 left-4 z-10 px-3 py-1 rounded-full text-[10px] font-mono uppercase font-black ${p.badgeColor} backdrop-blur-md shadow-md">
+                ${p.badge}
+              </span>
+
+              <!-- Flip Toggle Button -->
+              <button data-flip-id="${p.id}" class="absolute top-4 right-4 z-10 px-3 py-1.5 rounded-xl bg-black/80 dark:bg-white/90 text-white dark:text-black text-[11px] font-mono font-bold uppercase backdrop-blur-md hover:scale-105 transition-transform flex items-center gap-1 shadow-lg">
+                <span>↻ ${currentCardState.flipped ? 'Show Front' : 'Show Back Graphic'}</span>
+              </button>
+
+              <!-- Main Product / Model / Graphic Image -->
+              <img 
+                src="${displayImg}" 
+                onerror="this.src='${displayImg.replace('./public/', './')}'" 
+                alt="${p.name}" 
+                class="w-full h-full object-cover sm:object-contain transition-transform duration-700 group-hover:scale-105 filter drop-shadow-md"
+              />
+
+              <!-- Overlay Label on Hover showing back preview tip -->
+              <div class="absolute bottom-3 inset-x-4 px-3 py-1.5 rounded-xl bg-black/70 backdrop-blur-md text-white text-[10px] font-mono text-center opacity-0 group-hover:opacity-100 transition-opacity">
+                Click "↻ Show Back Graphic" to inspect 340 GSM decal
+              </div>
+            </div>
+
+            <!-- Product Card Info & Controls -->
+            <div class="p-6 flex flex-col gap-4">
+              <div>
+                <div class="flex items-center justify-between gap-2">
+                  <span class="text-[11px] font-mono text-pink-500 uppercase font-bold tracking-wider">${p.fit}</span>
+                  <span class="text-xs font-mono text-neutral-400 font-bold">In Stock</span>
+                </div>
+                <h3 class="font-black text-lg tracking-tight text-neutral-900 dark:text-white uppercase leading-snug mt-1">${p.name}</h3>
+                <p class="text-xs font-mono text-neutral-500 dark:text-neutral-400 line-clamp-1 mt-0.5">${p.decalName}</p>
+              </div>
+
+              <!-- Size Selector Row -->
+              <div class="flex flex-col gap-1.5">
+                <span class="text-[10px] font-mono text-neutral-400 uppercase font-semibold">Select Size (Oversized Boxy Fit):</span>
+                <div class="grid grid-cols-4 gap-2">
+                  ${SIZE_OPTIONS.map(s => {
+                    const active = currentCardState.size === s;
+                    return `
+                      <button data-card-size="${p.id}" data-size-val="${s}" class="h-9 rounded-xl font-mono text-xs font-extrabold transition-all border ${active ? 'bg-black dark:bg-white text-white dark:text-black border-black dark:border-white shadow-md' : 'bg-neutral-100 dark:bg-neutral-800 text-neutral-600 dark:text-neutral-300 border-neutral-200 dark:border-neutral-700 hover:border-neutral-400'}">${s}</button>
+                    `;
+                  }).join('')}
+                </div>
+              </div>
+
+              <!-- Price & Dual Actions -->
+              <div class="pt-2 border-t border-neutral-100 dark:border-neutral-800/80 flex flex-col gap-2.5">
+                <div class="flex items-baseline justify-between">
+                  <span class="text-2xl font-black font-mono text-neutral-900 dark:text-white">${formatLKR(p.price)}</span>
+                  <span class="text-[11px] font-mono text-emerald-500 font-bold uppercase">⚡ Free Dispatch</span>
+                </div>
+
+                <div class="grid grid-cols-2 gap-2">
+                  <!-- Instant WhatsApp Order -->
+                  <button data-wa-order="${p.id}" class="h-12 rounded-xl bg-emerald-600 hover:bg-emerald-500 text-white font-black text-xs uppercase tracking-wider flex items-center justify-center gap-1.5 shadow-lg active:scale-95 transition-all">
+                    <span>💬 WhatsApp Order</span>
+                  </button>
+
+                  <!-- Add to Bag -->
+                  <button data-add-card="${p.id}" class="h-12 rounded-xl bg-black dark:bg-white hover:bg-neutral-800 dark:hover:bg-neutral-100 text-white dark:text-black font-black text-xs uppercase tracking-wider flex items-center justify-center gap-1.5 shadow-lg active:scale-95 transition-all">
+                    <span>🛍 Add to Bag</span>
+                  </button>
+                </div>
+              </div>
+
+            </div>
+          </div>
+        `;
+      }).join('');
+
+      // Attach Card Events
+      productGrid.querySelectorAll('[data-flip-id]').forEach(btn => {
+        btn.addEventListener('click', (e) => {
+          e.stopPropagation();
+          const id = btn.dataset.flipId;
+          if (!state.cardStates[id]) state.cardStates[id] = { size: 'L', flipped: false };
+          state.cardStates[id].flipped = !state.cardStates[id].flipped;
+          renderProductsGrid();
+        });
+      });
+
+      productGrid.querySelectorAll('[data-card-size]').forEach(btn => {
+        btn.addEventListener('click', () => {
+          const id = btn.dataset.cardSize;
+          const val = btn.dataset.sizeVal;
+          if (!state.cardStates[id]) state.cardStates[id] = { size: 'L', flipped: false };
+          state.cardStates[id].size = val;
+          renderProductsGrid();
+        });
+      });
+
+      // Direct WhatsApp Order button on card in LKR
+      productGrid.querySelectorAll('[data-wa-order]').forEach(btn => {
+        btn.addEventListener('click', () => {
+          const id = btn.dataset.waOrder;
+          const p = PRODUCTS.find(prod => prod.id === id);
+          const size = (state.cardStates[id] && state.cardStates[id].size) || 'L';
+          if (p) {
+            const text = `Hi CHAEN Team! I want to order directly via WhatsApp:\n\n` +
+                         `✦ Item: ${p.name}\n` +
+                         `✦ Fit/Gender: ${p.fit}\n` +
+                         `✦ Size Selected: ${size} (Oversized Boxy)\n` +
+                         `✦ Color: ${p.colorName}\n` +
+                         `✦ Back Graphic: ${p.decalName}\n` +
+                         `✦ Price: ${formatLKR(p.price)}\n\n` +
+                         `Please let me know Sri Lanka payment and express delivery dispatch details!`;
+            window.open(`https://wa.me/94770000000?text=${encodeURIComponent(text)}`, '_blank');
+          }
+        });
+      });
+
+      // Add to Bag from Card
+      productGrid.querySelectorAll('[data-add-card]').forEach(btn => {
+        btn.addEventListener('click', () => {
+          const id = btn.dataset.addCard;
+          const p = PRODUCTS.find(prod => prod.id === id);
+          const size = (state.cardStates[id] && state.cardStates[id].size) || 'L';
+          if (p) {
+            const itemId = `${p.id}-${size}`;
+            const existing = state.cart.find(item => item.id === itemId);
+            if (existing) {
+              existing.quantity += 1;
+            } else {
+              state.cart.push({
+                id: itemId,
+                name: p.name,
+                price: p.price,
+                colorName: p.colorName,
+                colorHex: p.colorHex,
+                size: size,
+                decalName: p.decalName,
+                decalPath: p.frontImg,
+                quantity: 1
+              });
+            }
+            renderCart();
+            toggleCart(true);
+          }
+        });
+      });
+    }
+
+    // --- Filter Buttons ---
+    document.querySelectorAll('.filter-btn').forEach(btn => {
+      btn.addEventListener('click', () => {
+        document.querySelectorAll('.filter-btn').forEach(b => {
+          b.classList.remove('bg-black', 'dark:bg-white', 'text-white', 'dark:text-black', 'shadow-lg');
+          b.classList.add('bg-white/70', 'dark:bg-neutral-900/70', 'text-neutral-600', 'dark:text-neutral-300');
+        });
+        btn.classList.add('bg-black', 'dark:bg-white', 'text-white', 'dark:text-black', 'shadow-lg');
+        btn.classList.remove('bg-white/70', 'dark:bg-neutral-900/70', 'text-neutral-600', 'dark:text-neutral-300');
+        state.activeFilter = btn.dataset.filter;
+        renderProductsGrid();
+      });
+    });
+
+    // --- Initialize UI Controls for 3D Studio ---
+    function renderCustomizationUI() {
+      // Colors
+      colorSelectorContainer.innerHTML = COLOR_OPTIONS.map(c => {
+        const active = state.selectedColor.id === c.id;
+        return `
+          <button data-color-id="${c.id}" class="w-11 h-11 rounded-2xl transition-all flex items-center justify-center border-2 shadow-sm ${active ? 'border-black dark:border-white scale-110 shadow-lg ring-2 ring-pink-500/30' : 'border-neutral-300 dark:border-neutral-700 hover:scale-105'}" style="background-color: ${c.hex}" title="${c.name}">
+            ${active ? `<span style="color: ${c.textColor}" class="font-black text-xs">✓</span>` : ''}
+          </button>
+        `;
+      }).join('');
+
+      // Decals
+      decalSelectorContainer.innerHTML = DECAL_OPTIONS.map(d => {
+        const active = state.selectedDecal.id === d.id;
+        return `
+          <button data-decal-id="${d.id}" class="flex items-center gap-3 p-2.5 rounded-2xl border text-left transition-all ${active ? 'bg-neutral-100 dark:bg-neutral-800 border-black dark:border-white shadow-md' : 'bg-white/60 dark:bg-neutral-900/40 border-neutral-200 dark:border-neutral-800 hover:border-neutral-400' }">
+            <div class="w-12 h-12 rounded-xl bg-neutral-100 dark:bg-neutral-800 flex items-center justify-center flex-shrink-0 p-1.5 border border-neutral-200/50">
+              <img src="${d.path}" onerror="this.src='${d.path.replace('./public/', './')}'" alt="${d.name}" class="w-full h-full object-contain filter drop-shadow" />
+            </div>
+            <div class="flex flex-col min-w-0">
+              <span class="font-extrabold text-xs uppercase text-neutral-900 dark:text-white truncate">${d.name}</span>
+              <span class="text-[10px] text-neutral-500 dark:text-neutral-400 line-clamp-1 font-mono">${d.subtitle}</span>
+              ${d.priceOffset > 0 ? `<span class="text-[10px] font-mono text-pink-500 font-bold mt-0.5">+${formatLKR(d.priceOffset)}</span>` : ''}
+            </div>
+          </button>
+        `;
+      }).join('');
+
+      // Sizes
+      sizeSelectorContainer.innerHTML = SIZE_OPTIONS.map(s => {
+        const active = state.selectedSize === s;
+        return `
+          <button data-size="${s}" class="h-11 rounded-xl font-mono text-xs font-extrabold uppercase transition-all ${active ? 'bg-black dark:bg-white text-white dark:text-black shadow-md scale-[1.02]' : 'bg-neutral-100 dark:bg-neutral-800 text-neutral-600 dark:text-neutral-300 hover:bg-neutral-200'}">${s}</button>
+        `;
+      }).join('');
+
+      // Labels & Price
+      const total = state.basePrice + state.selectedDecal.priceOffset;
+      selectedColorNameEl.textContent = state.selectedColor.name;
+      selectedDecalNameEl.textContent = state.selectedDecal.name;
+      selectedSizeNameEl.textContent = state.selectedSize;
+      displayPriceEl.textContent = formatLKR(total);
+      addBtnTextEl.textContent = `Add to Bag — ${formatLKR(total)}`;
+
+      // Attach Event Listeners
+      colorSelectorContainer.querySelectorAll('button').forEach(btn => {
+        btn.addEventListener('click', () => {
+          const found = COLOR_OPTIONS.find(c => c.id === btn.dataset.colorId);
+          if (found) {
+            state.selectedColor = found;
+            renderCustomizationUI();
+            updateThreeColor();
+          }
+        });
+      });
+
+      decalSelectorContainer.querySelectorAll('button').forEach(btn => {
+        btn.addEventListener('click', () => {
+          const found = DECAL_OPTIONS.find(d => d.id === btn.dataset.decalId);
+          if (found) {
+            state.selectedDecal = found;
+            renderCustomizationUI();
+            updateThreeDecal();
+          }
+        });
+      });
+
+      sizeSelectorContainer.querySelectorAll('button').forEach(btn => {
+        btn.addEventListener('click', () => {
+          state.selectedSize = btn.dataset.size;
+          renderCustomizationUI();
+        });
+      });
+    }
+
+    // --- Cart Functions ---
+    function updateWhatsAppLink() {
+      const subtotal = state.cart.reduce((sum, item) => sum + item.price * item.quantity, 0);
+      const userPhoneOrNote = whatsappUserPhoneInput.value.trim();
+      
+      let text = 'Hi CHAEN Team! I want to confirm my order via WhatsApp:\n\n';
+      state.cart.forEach((item, idx) => {
+        const itemTotal = item.price * item.quantity;
+        text += `${idx + 1}. ${item.name}\n`;
+        text += `   - Color: ${item.colorName}\n`;
+        text += `   - Size: ${item.size} (Oversized Boxy Fit)\n`;
+        text += `   - Quantity: ${item.quantity} x ${formatLKR(item.price)} = ${formatLKR(itemTotal)}\n\n`;
+      });
+      text += `Total Due: ${formatLKR(subtotal)}\n`;
+      if (userPhoneOrNote) {
+        text += `My Contact/Address Note: ${userPhoneOrNote}\n`;
+      }
+      text += `\nPlease confirm dispatch for Sri Lanka / Worldwide express delivery!`;
+      whatsappLink.href = `https://wa.me/94770000000?text=${encodeURIComponent(text)}`;
+    }
+
+    if (whatsappUserPhoneInput) {
+      whatsappUserPhoneInput.addEventListener('input', updateWhatsAppLink);
+    }
+
+    function renderCart() {
+      const totalCount = state.cart.reduce((sum, item) => sum + item.quantity, 0);
+      const subtotal = state.cart.reduce((sum, item) => sum + item.price * item.quantity, 0);
+
+      if (totalCount > 0) {
+        cartCountBadge.textContent = totalCount;
+        cartCountBadge.classList.remove('hidden');
+        cartCountBadge.classList.add('flex');
+      } else {
+        cartCountBadge.classList.add('hidden');
+        cartCountBadge.classList.remove('flex');
+      }
+
+      drawerTitle.textContent = `CHAEN™ Bag (${totalCount})`;
+
+      if (state.cart.length === 0) {
+        cartFooter.classList.add('hidden');
+        cartFooter.classList.remove('flex');
+        cartItemsContainer.innerHTML = `
+          <div class="flex flex-col items-center justify-center h-full text-center py-16 px-4">
+            <div class="w-16 h-16 rounded-full bg-neutral-100 dark:bg-neutral-800 flex items-center justify-center mb-4 text-neutral-400 text-2xl">🛍</div>
+            <p class="font-black text-neutral-900 dark:text-white uppercase tracking-wider text-base">Your bag is empty</p>
+            <p class="text-xs text-neutral-500 dark:text-neutral-400 mt-1 max-w-[240px]">Explore our CHAEN heavyweight collection and customize your piece with archive back decals.</p>
+          </div>
+        `;
+      } else {
+        cartFooter.classList.remove('hidden');
+        cartFooter.classList.add('flex');
+        cartSubtotalEl.textContent = formatLKR(subtotal);
+        cartTotalEl.textContent = formatLKR(subtotal);
+
+        updateWhatsAppLink();
+
+        cartItemsContainer.innerHTML = state.cart.map(item => `
+          <div class="pt-5 first:pt-0 flex gap-4 items-start">
+            <div class="w-20 h-24 rounded-2xl border border-neutral-200 dark:border-neutral-800 flex items-center justify-center relative flex-shrink-0 overflow-hidden shadow-inner" style="background-color: ${item.colorHex}">
+              <img src="${item.decalPath}" onerror="this.src='${item.decalPath.replace('./public/', './')}'" class="w-full h-full object-cover filter drop-shadow" />
+            </div>
+            <div class="flex-1 flex flex-col justify-between min-h-[96px]">
+              <div>
+                <div class="flex justify-between items-start gap-2">
+                  <h4 class="font-black text-xs tracking-wider text-neutral-900 dark:text-white uppercase leading-snug">${item.name}</h4>
+                  <button data-remove-id="${item.id}" class="text-neutral-400 hover:text-red-500 transition-colors p-1 font-bold">✕</button>
+                </div>
+                ${item.decalName ? `<p class="text-[11px] font-mono font-bold text-pink-500 mt-0.5">${item.decalName}</p>` : ''}
+                <div class="flex items-center gap-2 mt-1 text-[11px] font-mono text-neutral-600 dark:text-neutral-300">
+                  <span class="flex items-center gap-1">Color: <span class="inline-block w-3 h-3 rounded-full border border-neutral-300 shadow-sm" style="background-color: ${item.colorHex}"></span> ${item.colorName}</span>
+                  <span>•</span>
+                  <span>Size: ${item.size}</span>
+                </div>
+              </div>
+              <div class="flex items-center justify-between mt-3">
+                <div class="flex items-center border border-neutral-200 dark:border-neutral-800 rounded-lg overflow-hidden bg-neutral-50 dark:bg-neutral-800/50">
+                  <button data-qty-id="${item.id}" data-delta="-1" class="w-7 h-7 flex items-center justify-center text-neutral-600 dark:text-neutral-300 hover:bg-neutral-200 font-bold">─</button>
+                  <span class="w-8 text-center text-xs font-bold font-mono">${item.quantity}</span>
+                  <button data-qty-id="${item.id}" data-delta="1" class="w-7 h-7 flex items-center justify-center text-neutral-600 dark:text-neutral-300 hover:bg-neutral-200 font-bold">┼</button>
+                </div>
+                <span class="font-black text-sm text-neutral-900 dark:text-white font-mono">${formatLKR(item.price * item.quantity)}</span>
+              </div>
+            </div>
+          </div>
+        `).join('');
+
+        cartItemsContainer.querySelectorAll('[data-remove-id]').forEach(btn => {
+          btn.addEventListener('click', () => {
+            state.cart = state.cart.filter(i => i.id !== btn.dataset.removeId);
+            renderCart();
+          });
+        });
+
+        cartItemsContainer.querySelectorAll('[data-qty-id]').forEach(btn => {
+          btn.addEventListener('click', () => {
+            const id = btn.dataset.qtyId;
+            const delta = parseInt(btn.dataset.delta, 10);
+            const found = state.cart.find(i => i.id === id);
+            if (found) {
+              found.quantity += delta;
+              if (found.quantity <= 0) {
+                state.cart = state.cart.filter(i => i.id !== id);
+              }
+              renderCart();
+            }
+          });
+        });
+      }
+    }
+
+    function toggleCart(open) {
+      state.isCartOpen = open !== undefined ? open : !state.isCartOpen;
+      if (state.isCartOpen) {
+        cartBackdrop.classList.remove('opacity-0', 'pointer-events-none');
+        cartBackdrop.classList.add('opacity-100', 'pointer-events-auto');
+        cartDrawer.classList.remove('translate-x-full');
+        cartDrawer.classList.add('translate-x-0');
+      } else {
+        cartBackdrop.classList.remove('opacity-100', 'pointer-events-auto');
+        cartBackdrop.classList.add('opacity-0', 'pointer-events-none');
+        cartDrawer.classList.remove('translate-x-0');
+        cartDrawer.classList.add('translate-x-full');
+      }
+    }
+
+    addToCartBtn.addEventListener('click', () => {
+      const price = state.basePrice + state.selectedDecal.priceOffset;
+      const itemId = `CHAEN-STUDIO-${state.selectedColor.id}-${state.selectedSize}-${state.selectedDecal.id}`;
+      const existing = state.cart.find(i => i.id === itemId);
+      if (existing) {
+        existing.quantity += 1;
+      } else {
+        state.cart.push({
+          id: itemId,
+          name: 'CHAEN STUDIO CUSTOM OVERSIZED TEE',
+          price,
+          colorName: state.selectedColor.name,
+          colorHex: state.selectedColor.hex,
+          size: state.selectedSize,
+          decalName: state.selectedDecal.name,
+          decalPath: state.selectedDecal.path,
+          quantity: 1
+        });
+      }
+      renderCart();
+      toggleCart(true);
+    });
+
+    cartOpenBtn.addEventListener('click', () => toggleCart(true));
+    cartCloseBtn.addEventListener('click', () => toggleCart(false));
+    cartBackdrop.addEventListener('click', () => toggleCart(false));
+    clearCartBtn.addEventListener('click', () => {
+      state.cart = [];
+      renderCart();
+    });
+
+    // --- Theme Toggle ---
+    themeToggleBtn.addEventListener('click', () => {
+      state.isDark = !state.isDark;
+      if (state.isDark) {
+        document.documentElement.classList.add('dark');
+        sunIcon.classList.remove('hidden');
+        moonIcon.classList.add('hidden');
+      } else {
+        document.documentElement.classList.remove('dark');
+        sunIcon.classList.add('hidden');
+        moonIcon.classList.remove('hidden');
+      }
+    });
+
+    window.addEventListener('scroll', () => {
+      if (window.scrollY > 40) {
+        mainHeader.classList.add('bg-white/90', 'dark:bg-neutral-900/90', 'backdrop-blur-2xl', 'border-b', 'border-neutral-200/80', 'dark:border-neutral-800/80', 'shadow-xl', 'py-3', 'top-0');
+      } else {
+        mainHeader.classList.remove('bg-white/90', 'dark:bg-neutral-900/90', 'backdrop-blur-2xl', 'border-b', 'border-neutral-200/80', 'dark:border-neutral-800/80', 'shadow-xl', 'py-3', 'top-0');
+      }
+    });
+
+    // --- Three.js WebGL Engine & Decal Studio Setup ---
+    const container = document.getElementById('webgl-canvas-container');
+    const scene = new THREE.Scene();
+    const camera = new THREE.PerspectiveCamera(42, window.innerWidth / window.innerHeight, 0.1, 100);
+    camera.position.set(0, 0, 3.8);
+
+    const renderer = new THREE.WebGLRenderer({ antialias: true, alpha: true, powerPreference: 'high-performance' });
+    renderer.setSize(window.innerWidth, window.innerHeight);
+    renderer.setPixelRatio(Math.min(window.devicePixelRatio, 2));
+    renderer.shadowMap.enabled = true;
+    renderer.shadowMap.type = THREE.PCFSoftShadowMap;
+    renderer.outputColorSpace = THREE.SRGBColorSpace;
+    renderer.toneMapping = THREE.ACESFilmicToneMapping;
+    renderer.toneMappingExposure = 1.25;
+    container.appendChild(renderer.domElement);
+
+    const ambientLight = new THREE.AmbientLight(0xffffff, 1.5);
+    scene.add(ambientLight);
+
+    const spotLight1 = new THREE.SpotLight(0xffffff, 3.2);
+    spotLight1.position.set(6, 9, 6);
+    spotLight1.angle = 0.65;
+    spotLight1.penumbra = 0.8;
+    spotLight1.castShadow = true;
+    spotLight1.shadow.bias = -0.0001;
+    scene.add(spotLight1);
+
+    const spotLight2 = new THREE.SpotLight(0xffffff, 1.8);
+    spotLight2.position.set(-6, 6, -6);
+    scene.add(spotLight2);
+
+    const dirLight = new THREE.DirectionalLight(0xffffff, 0.9);
+    dirLight.position.set(0, -5, 4);
+    scene.add(dirLight);
+
+    const controls = new OrbitControls(camera, renderer.domElement);
+    controls.enableZoom = false;
+    controls.enablePan = false;
+    controls.minPolarAngle = Math.PI / 3;
+    controls.maxPolarAngle = Math.PI / 1.7;
+    controls.dampingFactor = 0.05;
+
+    const sceneGroup = new THREE.Group();
+    sceneGroup.position.set(0, -0.1, 0);
+    sceneGroup.scale.set(1.15, 1.15, 1.15);
+    scene.add(sceneGroup);
+
+    let tShirtMesh = null;
+    let tShirtMaterial = null;
+    let materialShader = null;
+    let activeDecalMeshFront = null;
+    let activeDecalMeshLogo = null;
+    let activeDecalMeshBack = null;
+    const textureLoader = new THREE.TextureLoader();
+
+    const chaenLogoTexture = textureLoader.load('./public/decals/chaen_logo.png', undefined, undefined, () => {
+      textureLoader.load('./decals/chaen_logo.png', t => { t.colorSpace = THREE.SRGBColorSpace; });
+    });
+    chaenLogoTexture.colorSpace = THREE.SRGBColorSpace;
+    chaenLogoTexture.anisotropy = 16;
+
+    let currentGraphicTexture = textureLoader.load(state.selectedDecal.path, undefined, undefined, () => {
+      textureLoader.load(state.selectedDecal.path.replace('./public/', './'), t => {
+        t.colorSpace = THREE.SRGBColorSpace;
+        updateThreeDecal();
+      });
+    });
+    currentGraphicTexture.colorSpace = THREE.SRGBColorSpace;
+    currentGraphicTexture.anisotropy = 16;
+
+    function createOrUpdateDecalMeshes() {
+      if (!tShirtMesh) return;
+
+      if (activeDecalMeshFront) tShirtMesh.remove(activeDecalMeshFront);
+      if (activeDecalMeshLogo) tShirtMesh.remove(activeDecalMeshLogo);
+      if (activeDecalMeshBack) tShirtMesh.remove(activeDecalMeshBack);
+
+      const decalMatLogo = new THREE.MeshStandardMaterial({
+        map: chaenLogoTexture,
+        transparent: true,
+        depthTest: true,
+        depthWrite: false,
+        polygonOffset: true,
+        polygonOffsetFactor: -4,
+        roughness: 0.5
+      });
+
+      const decalMatGraphic = new THREE.MeshStandardMaterial({
+        map: currentGraphicTexture,
+        transparent: true,
+        depthTest: true,
+        depthWrite: false,
+        polygonOffset: true,
+        polygonOffsetFactor: -4,
+        roughness: 0.5
+      });
+
+      // 1. CHAEN Brand Logo on Upper Front Chest
+      const logoGeom = new DecalGeometry(tShirtMesh, new THREE.Vector3(0, 0.165, 0.144), new THREE.Euler(0, 0, 0), new THREE.Vector3(0.14, 0.14, 0.14));
+      activeDecalMeshLogo = new THREE.Mesh(logoGeom, decalMatLogo);
+      tShirtMesh.add(activeDecalMeshLogo);
+
+      // 2. Front Graphic Decal
+      const frontGeom = new DecalGeometry(tShirtMesh, new THREE.Vector3(0, 0.035, 0.144), new THREE.Euler(0, 0, 0), new THREE.Vector3(0.36, 0.36, 0.36));
+      activeDecalMeshFront = new THREE.Mesh(frontGeom, decalMatGraphic);
+      tShirtMesh.add(activeDecalMeshFront);
+
+      // 3. Back Graphic Decal
+      const backGeom = new DecalGeometry(tShirtMesh, new THREE.Vector3(0, 0.04, -0.144), new THREE.Euler(0, Math.PI, 0), new THREE.Vector3(0.38, 0.38, 0.38));
+      activeDecalMeshBack = new THREE.Mesh(backGeom, decalMatGraphic);
+      tShirtMesh.add(activeDecalMeshBack);
+    }
+
+    function updateThreeColor() {
+      if (tShirtMaterial) {
+        tShirtMaterial.color.set(state.selectedColor.hex);
+      }
+    }
+
+    function updateThreeDecal() {
+      currentGraphicTexture = textureLoader.load(state.selectedDecal.path, () => {
+        currentGraphicTexture.colorSpace = THREE.SRGBColorSpace;
+        currentGraphicTexture.anisotropy = 16;
+        createOrUpdateDecalMeshes();
+      }, undefined, () => {
+        currentGraphicTexture = textureLoader.load(state.selectedDecal.path.replace('./public/', './'), () => {
+          currentGraphicTexture.colorSpace = THREE.SRGBColorSpace;
+          currentGraphicTexture.anisotropy = 16;
+          createOrUpdateDecalMeshes();
+        });
+      });
+    }
+
+    const gltfLoader = new GLTFLoader();
+    const modelPath = './public/model/scene.gltf';
+    const fallbackModelPath = './model/scene.gltf';
+
+    function initModel(gltf) {
+      const model = gltf.scene;
+      model.traverse(child => {
+        if (child.isMesh) {
+          child.castShadow = true;
+          child.receiveShadow = true;
+          if (child.name === 'Object_2' || child.geometry) {
+            if (!tShirtMesh) {
+              tShirtMesh = child;
+              tShirtMaterial = child.material;
+              if (tShirtMaterial) {
+                tShirtMaterial.roughness = 0.5;
+                tShirtMaterial.metalness = 0.05;
+                tShirtMaterial.color.set(state.selectedColor.hex);
+
+                tShirtMaterial.onBeforeCompile = (shader) => {
+                  shader.uniforms.uTime = { value: 0 };
+                  materialShader = shader;
+                  shader.vertexShader = `uniform float uTime;\n` + shader.vertexShader;
+                  shader.vertexShader = shader.vertexShader.replace(
+                    '#include <begin_vertex>',
+                    `#include <begin_vertex>
+                    float wave1 = sin(transformed.x * 10.0 + uTime * 2.8) * 0.0045;
+                    float wave2 = cos(transformed.y * 8.0 + uTime * 2.2) * 0.0035;
+                    float wave3 = sin((transformed.x + transformed.y) * 5.0 + uTime * 1.6) * 0.003;
+                    transformed += normal * (wave1 + wave2 + wave3);
+                    `
+                  );
+                };
+              }
+            }
+          }
+        }
+      });
+
+      sceneGroup.add(model);
+      createOrUpdateDecalMeshes();
+
+      gsap.fromTo(sceneGroup.scale, { x: 0.6, y: 0.6, z: 0.6 }, { x: 1.15, y: 1.15, z: 1.15, duration: 1.8, ease: 'power3.out' });
+      gsap.fromTo(sceneGroup.rotation, { y: -Math.PI * 0.35, x: 0.15 }, { y: 0, x: 0, duration: 2.0, ease: 'power3.out' });
+
+      gsap.registerPlugin(ScrollTrigger);
+      const tl = gsap.timeline({
+        scrollTrigger: {
+          trigger: '#collection-section',
+          start: 'top bottom',
+          end: 'bottom top',
+          scrub: 1.2
+        }
+      });
+
+      // Move canvas model gently out of the way or rotate it during scroll
+      tl.to(sceneGroup.position, { x: 1.5, y: -0.3, z: -1, ease: 'power2.inOut' }, 0)
+        .to(sceneGroup.rotation, { y: Math.PI * 0.8, x: 0.1, z: 0.05, ease: 'power2.inOut' }, 0);
+        
+      const tl2 = gsap.timeline({
+        scrollTrigger: {
+          trigger: '#product-section',
+          start: 'top bottom',
+          end: 'center center',
+          scrub: 1.2
+        }
+      });
+      tl2.to(sceneGroup.position, { x: -0.85, y: -0.05, z: 0.3, ease: 'power2.inOut' }, 0)
+         .to(sceneGroup.rotation, { y: 0.22, x: 0.04, z: -0.03, ease: 'power2.inOut' }, 0);
+    }
+
+    gltfLoader.load(modelPath, initModel, undefined, () => {
+      gltfLoader.load(fallbackModelPath, initModel);
+    });
+
+    window.addEventListener('resize', () => {
+      camera.aspect = window.innerWidth / window.innerHeight;
+      camera.updateProjectionMatrix();
+      renderer.setSize(window.innerWidth, window.innerHeight);
+    });
+
+    const clock = new THREE.Clock();
+    function animate() {
+      requestAnimationFrame(animate);
+      const time = clock.getElapsedTime();
+
+      if (sceneGroup && sceneGroup.children.length > 0) {
+        sceneGroup.position.y = -0.1 + Math.sin(time * 1.6) * 0.035;
+        sceneGroup.rotation.z = Math.sin(time * 1.2) * 0.012 + (gsap.getProperty(sceneGroup.rotation, 'z') || 0);
+        const baseRotY = gsap.getProperty(sceneGroup.rotation, 'y') || 0;
+        sceneGroup.rotation.y = baseRotY + Math.sin(time * 0.8) * 0.015;
+      }
+
+      if (tShirtMaterial) {
+        const targetColor = new THREE.Color(state.selectedColor.hex);
+        tShirtMaterial.color.lerp(targetColor, 0.1);
+      }
+
+      if (materialShader) {
+        materialShader.uniforms.uTime.value = time;
+      }
+
+      controls.update();
+      renderer.render(scene, camera);
+    }
+    animate();
+
+    // Initial UI Render
+    renderProductsGrid();
+    renderCustomizationUI();
+    renderCart();
+  </script>
+</body>
+</html>
